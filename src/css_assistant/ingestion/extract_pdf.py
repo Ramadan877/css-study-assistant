@@ -1,18 +1,5 @@
 from pypdf import PdfReader 
 
-# def extract_pages(pdf_path: str) -> list[dict]:
-#     reader = PdfReader(pdf_path)
-#     records = []
-#     pages = reader.pages
-#     for i, page in enumerate(pages, start=1):
-#         text = page.extract_text()
-#         if text is None:
-#             return ""
-#         records.append({"page_number": i, "text": text})
-
-    
-#     return records
-
 def extract_pages(
     pdf_path: str,
     document_id: str,
