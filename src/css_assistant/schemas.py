@@ -1,0 +1,6 @@
+from pydantic import BaseModel, ConfigDict, Field
+
+class QuestionRequest(BaseModel):
+    question: str = Field(min_length=1, max_length=2000)
+
+    model_config = ConfigDict(str_strip_whitespace=True)
