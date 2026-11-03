@@ -1,3 +1,8 @@
+import re
+
+
+STOP_WORDS = {"a", "an", "the", "is", "are", "what", "for", "of", "to", "and", "s"}
+
 def search_chunks(query: str, chunks: list[dict]) -> list[dict]:
     query = query.strip().lower()
 
@@ -14,9 +19,8 @@ def search_chunks(query: str, chunks: list[dict]) -> list[dict]:
     return matches_list
 
 def score_overlap(query: str, text: str) -> int:
-    query_words = set(query.lower().split())
-    text_words = set(text.lower().split())
-
+    query_words = tokenize(query)
+    text_words = tokenize(text)
     shared_words = query_words & text_words 
     return len(shared_words)
 
@@ -36,6 +40,12 @@ def rank_chunks(query: str, chunks: list[dict], top_k: int = 5) -> list[dict]:
     return results[:top_k]
 
 
+def tokenize(text: str) -> set[str]:
+    words = re.findall(r"[a-z]+", text.lower()) 
+    set_words = set(words)
+    set_words = set_words - STOP_WORDS
+    return set_words
+
 if __name__ == "__main__":
     chunks = [
         {"document_id": "demo", "page_number": 1, "chunk_number": 1,
@@ -46,5 +56,14 @@ if __name__ == "__main__":
         "text": "Students select elective courses."},
     ]
     # print(search_chunks(" elective ", chunks))
-    # print(score_overlap("thesis research", "THESIS thesis research methods"))
+    print(score_overlap("thesis research", "THESIS thesis research methods"))
     print(rank_chunks("thesis research", chunks, top_k=5))
+    print(tokenize("thesis, requirements?"))
+    print(tokenize("THESIS thesis"))
+    print(tokenize("!!!"))
+    print(tokenize("the and for"))
+    print(tokenize("not before submission"))
+
+    print(score_overlap("THESIS, requirements?", "Thesis requirements."))
+    print(score_overlap("thesis thesis", "thesis"))
+    print(score_overlap("scholarship", "thesis requirements"))
