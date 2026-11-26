@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: css_assistant
       POSTGRES_USER: css_user
-      POSTGRES_PASSWORD: "${CSS_DB_PASSWORD}"
+      POSTGRES_PASSWORD: "${CSS_DB_PASSWORD}:?Set CSS_DB_PASSWORD in .env"
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
